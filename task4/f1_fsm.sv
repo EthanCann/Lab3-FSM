@@ -2,7 +2,10 @@ module f1_fsm (
     input   logic       rst,
     input   logic       en,
     input   logic       clk,
+    input   logic       trigger,
     output  logic [7:0] data_out
+    output  logic       cmd_seq     // high for data_out != 0
+    output  logic       cmd_delay   // triggers delay.sv
 );
 
 //define states
@@ -10,7 +13,7 @@ typedef enum {S0, S1, S2, S3, S4, S5, S6, S7, S8} my_state;
 my_state current_state, next_state;
 
 // state transition
-always_ff @(posedge clk, posedge rst)
+always_ff @(posedge clk, posedge rst, posedge trigger)
     if (rst) current_state <= S0;
     else     current_state <= next_state;
 
